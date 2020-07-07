@@ -1,0 +1,22 @@
+{
+  "name": "ocprojet5",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chpe1/OCProjet5.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chpe1/OCProjet5/issues"
+  },
+  "homepage": "https://github.com/chpe1/OCProjet5#readme",
+  "dependencies": {
+    "bootstrap": "^4.5.0"
+  }
+}

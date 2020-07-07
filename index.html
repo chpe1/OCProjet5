@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Orinoco</title>
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> -->
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+  </head>
+
+<body>
+    <!-- Header -->
+    <div class="bg-light">
+      <div class="container">
+        <!-- Menu -->
+        <div class="row">
+          <nav class="col navbar navbar-expand-lg navbar-light">
+            <a class="navbar-brand" href="index.html">
+              <img src="images/logo_orinoco.png" height="40" alt="Site logo"></a> <!-- Logo du site dans le menu -->
+              <!-- Bouton navigation responsive -->
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <!-- Liste des items du menu -->
+              <div id="navbarContent" class="collapse navbar-collapse">
+                <ul class="navbar-nav">
+                  <li class="nav-item active">
+                      <a class="nav-link" href="index.html">Accueil</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="#">Produit</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="panier.html">Panier</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Confirmation de commande</a>
+                  </li>
+                </ul>
+              </div>  
+              <!-- Barre de recherche -->
+              <div class="row mb-2">
+                <div class="col">
+                   <input class="form-control" id="searchInput" type="text" placeholder="Search..">
+                </div>
+             </div>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <!-- Contenu du site-->
+    <div class="container">
+        <div class="row mb-4">
+          <div class="col">
+            <!-- Carrousel -->
+            <div id="carouselControls" class="carousel slide mt-3" data-ride="carousel" data-interval="5000">
+              <div class="carousel-inner">
+                 <div class="carousel-item active">
+                    <img src="images/apprenant.jpg" class="d-block w-100" alt="Orinoco">
+                 </div>
+                 <div class="carousel-item">
+                    <img src="images/apprenant2.jpg" class="d-block w-100" alt="Orinoco">
+                 </div>
+              </div>
+              <a class="carousel-control-prev" href="#carouselControls" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Précédent</span>
+             </a>
+             <a class="carousel-control-next" href="#carouselControls" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Suivant</span>
+             </a>
+           </div>
+           <!-- Fin carrousel-->
+          </div>
+        </div>
+        <div class="row mt-5">
+          <div class="col-12 col-lg-4">
+            <div class="card mb-4 mb-lg-0 border-primary shadow">
+              <img class="card-img-top" src="#" alt="#">
+              <div class="card-body">
+                 <h5 class="card-title">Titre de la carte</h5>
+                 <p class="card-text">Contenu textuel de la carte</p>
+              </div>
+              <a class="btn btn-primary stretched-link" href="#" role="button">Voir ce produit</a>
+            </div>
+          </div>
+          <div class="col-12 col-lg-4">
+            <div class="card mb-4 mb-lg-0 border-primary shadow">
+              <img class="card-img-top" src="#" alt="#">
+              <div class="card-body">
+                 <h5 class="card-title">Titre2 de la carte</h5>
+                 <p class="card-text">Contenu textuel de la carte</p>
+              </div>
+              <a class="btn btn-primary stretched-link" href="#" role="button">Voir ce produit</a>
+            </div>
+          </div>
+          <div class="col-12 col-lg-4">
+            <div class="card mb-4 mb-lg-0 border-primary shadow">
+              <img class="card-img-top" src="#" alt="#">
+              <div class="card-body">
+                 <h5 class="card-title">Titre3 de la carte</h5>
+                 <p class="card-text">Contenu textuel de la carte</p>
+              </div>
+              <a class="btn btn-primary stretched-link" href="#" role="button">Voir ce produit</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="bg-light mt-5">
+        <div class="container">
+          <div class="row pt-4 pb-3">
+            <div class="col">
+              <ul class="list-inline text-center">
+                <li class="list-inline-item"><a href="#">À propos</a></li>
+                <li class="list-inline-item">&middot;</li>
+                <li class="list-inline-item"><a href="#">Vie privée</a></li>
+                <li class="list-inline-item">&middot;</li>
+                <li class="list-inline-item"><a href="#">Conditions Générales de Vente</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <!-- <h1 class="debut">Quelques produits</h1>
+    <div id="contenu">
+        <ul id="produits">
+        </ul>
+    </div> -->
+
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="js/ajax.js"></script>
+    <script src="js/produits.js"></script>
+
+    <script>
+      $(document).ready(function(){
+         $("#searchInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $(".card").filter(function() {
+               $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+         });
+      });
+   </script>
+
+  </body>
+
+</html>
