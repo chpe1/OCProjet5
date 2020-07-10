@@ -6,7 +6,7 @@ function listeProduits(data){ // Reconstruction du DOM de la partie CARD
       divColElt.classList.add('col-12', 'col-lg-4', 'mb-4');
       
       let divCardElt = document.createElement('div');
-      divCardElt.classList.add('card', 'mb-4', 'mb-lg-0', 'border-primary', 'shadow');
+      divCardElt.classList.add('card', 'border-primary', 'shadow');
       
       let imgElt = document.createElement('img');
       imgElt.src = data[i].imageUrl;
@@ -26,7 +26,7 @@ function listeProduits(data){ // Reconstruction du DOM de la partie CARD
       pElt.appendChild(document.createTextNode(data[i].description));
       
       let aElt = document.createElement('a');
-      aElt.href= "#";
+      aElt.href= "index.html?id=" + data[i]._id;
       aElt.classList.add('btn', 'btn-primary', 'stretched-link');
       aElt.setAttribute('role', 'button');
       aElt.appendChild(document.createTextNode('Voir ce produit'));
@@ -41,34 +41,118 @@ function listeProduits(data){ // Reconstruction du DOM de la partie CARD
   }
 }
 
-// Reconstruction de la partie carrousel
-
-function carrousel(data){
-  let carrouselElt = document.getElementById('carousel-inner');
-  for (let i=0; i<data.length; i++){
-    let divElt = document.createElement('div');
-    divElt.classList.add('carousel-item');
-    if (i==0){
-      divElt.classList.add('active');
-    }
-    let imgElt = document.createElement('img');
-    imgElt.src = data[i].imageUrl;
-    imgElt.alt = data[i].name;
-    imgElt.classList.add('d-block', 'w-100');
-    imgElt.setAttribute('height', '479px');
-
-    carrouselElt.appendChild(divElt);
-    divElt.appendChild(imgElt);
-  }
-}
-
-
+// Récupération des données de l'API
 fetch('http://localhost:3000/api/teddies') // Appel de l'API -- qui retourne une promesse nommée response
 .then((response) => response.json()) // Transforme cette promesse en une autre promesse au format json. then(response => response.json) est égal à then(fonction (response) { return response.json}
-.then(function(data){
-  carrousel(data);
-  listeProduits(data);
+.then(function(data){ // Les données sont contenues dans data qui est un tableau d'objets.
+  if (obtenirParametre("id")){ // Si id existe dans l'URL
+    for (let i=0;i<data.length;i++){ // On parcourt tout le tableau pour retrouver l'id correspondant
+      if (data[i]._id == obtenirParametre("id")){ // Une fois le produit correspondant obtenu
+        ProduitSeul(data[i]); // On affiche les caractéristiques du produit seul
+      }
+    }
+  }
+  else{ // Si id n'existe pas dans l'URL -> On affiche la liste des produits.
+    listeProduits(data);
+  }
+
 })
 .catch(function(error) { // gestion des erreurs renvoyées par le serveur
   console.log(error);
 });
+
+
+// Fonction de récupération de l'ID trouvée sur https://developer.mozilla.org/fr/docs/Web/API/window/location
+
+function obtenirParametre (sVar) {
+  return unescape(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + escape(sVar).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
+}
+
+function ProduitSeul(data){
+  let produitElt = document.getElementById('produits'); // Reconstruction du DOM pour un produit
+
+  let divLeftElt = document.createElement('div');
+  divLeftElt.classList.add('col-12', 'col-lg-6');
+
+  let divRightElt = document.createElement('div');
+  divRightElt.classList.add('col-12', 'col-lg-6');
+
+  let imgElt = document.createElement('img');
+  imgElt.classList.add('w-100');
+  imgElt.src=data.imageUrl;
+  imgElt.alt=data.name;
+
+  let h1Elt = document.createElement('H1');
+  h1Elt.classList.add('text-center');
+  h1Elt.appendChild(document.createTextNode(data.name));
+
+  let formElt = document.createElement('form');
+  formElt.setAttribute('role', 'form');
+
+  let formGroupElt1 = document.createElement('div');
+  formGroupElt1.classList.add('form-group');
+
+  let labelSelectElt = document.createElement('label');
+  labelSelectElt.setAttribute('for', 'couleur');
+  labelSelectElt.textContent = 'Couleurs :';
+  labelSelectElt.classList.add('col-12', 'text-center', 'text-lg-left');
+
+  let selectElt = document.createElement('select');
+  selectElt.classList.add('form-control', 'form-control-md');
+  selectElt.setAttribute('name', 'couleur');
+
+  for (let i=0; i<data.colors.length; i++){
+    let optionElt = document.createElement('option');
+    optionElt.text = data.colors[i];
+    optionElt.setAttribute('value', data.colors[i]);
+    selectElt.appendChild(optionElt);
+  }
+
+  let pElt= document.createElement('p');
+  pElt.textContent = data.description;
+
+  let formGroupElt2 = document.createElement('div');
+  formGroupElt2.classList.add('form-group');
+
+  let labelInputElt = document.createElement('label');
+  labelInputElt.setAttribute('for', 'quantity');
+  labelInputElt.textContent = "Quantité :";
+  labelInputElt.classList.add('col-12', 'text-center', 'text-lg-left');
+
+  let inputElt = document.createElement('input');
+  inputElt.setAttribute('type', 'number');
+  inputElt.setAttribute('min', '1');
+  inputElt.setAttribute('max', '10');
+  inputElt.setAttribute('name', 'quantity');
+  inputElt.setAttribute('value', '1');
+  inputElt.classList.add('form-control');
+
+  let prixElt = document.createElement('p');
+  prixElt.textContent = 'Prix : ' + data.price + ' EUR';
+  prixElt.classList.add('col-12', 'text-center', 'text-lg-left','font-weight-bold');
+
+  let buttonElt = document.createElement('button');
+  buttonElt.setAttribute('type', 'submit');
+  buttonElt.textContent = "Ajoutez au panier";
+  buttonElt.classList.add('btn', 'btn-primary', 'w-100');
+
+
+  formGroupElt1.appendChild(labelSelectElt);
+  formGroupElt1.appendChild(selectElt);
+
+  formElt.appendChild(pElt);
+  formElt.appendChild(formGroupElt1);
+  formElt.appendChild(formGroupElt2);
+  formGroupElt2.appendChild(labelInputElt);
+  formGroupElt2.appendChild(inputElt);
+  formElt.appendChild(prixElt);
+  formElt.appendChild(buttonElt);
+
+  divLeftElt.appendChild(imgElt);
+
+  divRightElt.appendChild(h1Elt);
+  divRightElt.appendChild(formElt);
+
+  produitElt.appendChild(divLeftElt);
+  produitElt.appendChild(divRightElt);
+}
