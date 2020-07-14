@@ -1,7 +1,12 @@
 if (localStorage.getItem('panier'))
 {
     let panier = JSON.parse(localStorage.getItem('panier'));
+    let products = [];
+    for (let i=0; i<panier.length; i++){
+        products[i] = panier[i].id;
+    }
     listCart(panier);
+    commande();
 }
 else{
     panierVide();
@@ -97,40 +102,24 @@ function commande(){
         let adresse = form.elements.adresse.value;
         let ville = form.elements.ville.value;
         // contact doit être un objet JSON qui contient les infos du formulaire à envoyer au serveur
-        // envoyer aussi le tableau de produits
-
-        ajaxPost("http://localhost:3000/api/teddies/order", contact,
-        function (reponse) {
-            // Affichage dans la console en cas de succès
-            console.log("Commande envoyée au serveur" + reponse);
+        let contact = {
+            nom : nom,
+            prenom : prenom,
+            adresse : adresse,
+            ville : ville,
+            email : email
         }
-    );
-    });
-}
 
-
-// Exécute un appel AJAX POST
-// Prend en paramètres l'URL cible, la donnée à envoyer et la fonction callback appelée en cas de succès
-// Le paramètre isJson permet d'indiquer si l'envoi concerne des données JSON
-function ajaxPost(url, data, callback, isJson) {
-    var req = new XMLHttpRequest();
-    req.open("POST", url);
-    req.addEventListener("load", function () {
-        if (req.status >= 200 && req.status < 400) {
-            // Appelle la fonction callback en lui passant la réponse de la requête
-            callback(req.responseText);
-        } else {
-            console.error(req.status + " " + req.statusText + " " + url);
+        // Paramètres de la fonction fetch pour l'envoi
+        let fetchData = { 
+            method: 'POST', 
+            body: contact, // + JSON.stringify(products)
+            headers: new Headers()
         }
-    });
-    req.addEventListener("error", function () {
-        console.error("Erreur réseau avec l'URL " + url);
-    });
-    if (isJson) {
-        // Définit le contenu de la requête comme étant du JSON
-        req.setRequestHeader("Content-Type", "application/json");
-        // Transforme la donnée du format JSON vers le format texte avant l'envoi
-        data = JSON.stringify(data);
+        fetch('http://localhost:3000/api/teddies/order', fetchData)
+        .then(function() {
+            console.log(order_id);
+        });
     }
-    req.send(data);
+    );
 }
