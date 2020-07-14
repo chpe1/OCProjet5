@@ -48,7 +48,9 @@ fetch('http://localhost:3000/api/teddies') // Appel de l'API -- qui retourne une
   if (obtenirParametre("id")){ // Si id existe dans l'URL
     for (let i=0;i<data.length;i++){ // On parcourt tout le tableau pour retrouver l'id correspondant
       if (data[i]._id == obtenirParametre("id")){ // Une fois le produit correspondant obtenu
+        let panier=[];
         ProduitSeul(data[i]); // On affiche les caractéristiques du produit seul
+        addCart(panier);
       }
     }
   }
@@ -68,8 +70,10 @@ function obtenirParametre (sVar) {
   return unescape(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + escape(sVar).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
 }
 
+
+// Reconstruction du DOM pour un produit
 function ProduitSeul(data){
-  let produitElt = document.getElementById('produits'); // Reconstruction du DOM pour un produit
+  let produitElt = document.getElementById('produits'); 
 
   let divLeftElt = document.createElement('div');
   divLeftElt.classList.add('col-12', 'col-lg-6');
@@ -88,6 +92,8 @@ function ProduitSeul(data){
 
   let formElt = document.createElement('form');
   formElt.setAttribute('role', 'form');
+  formElt.setAttribute('action', '');
+  formElt.setAttribute('method', 'post');
 
   let formGroupElt1 = document.createElement('div');
   formGroupElt1.classList.add('form-group');
@@ -126,15 +132,22 @@ function ProduitSeul(data){
   inputElt.setAttribute('name', 'quantity');
   inputElt.setAttribute('value', '1');
   inputElt.classList.add('form-control');
+  inputElt.id = "quantity";
 
   let prixElt = document.createElement('p');
-  prixElt.textContent = 'Prix : ' + data.price + ' EUR';
+  prixElt.textContent = 'Prix : ' + data.price/100 + ' EUR';
   prixElt.classList.add('col-12', 'text-center', 'text-lg-left','font-weight-bold');
+
+  let hiddenElt = document.createElement('input');
+  hiddenElt.setAttribute('type', 'hidden');
+  hiddenElt.setAttribute('value', data.price);
+  hiddenElt.id = "price";
 
   let buttonElt = document.createElement('button');
   buttonElt.setAttribute('type', 'submit');
   buttonElt.textContent = "Ajoutez au panier";
   buttonElt.classList.add('btn', 'btn-primary', 'w-100');
+  buttonElt.id = "submit";
 
 
   formGroupElt1.appendChild(labelSelectElt);
@@ -146,6 +159,7 @@ function ProduitSeul(data){
   formGroupElt2.appendChild(labelInputElt);
   formGroupElt2.appendChild(inputElt);
   formElt.appendChild(prixElt);
+  formElt.appendChild(hiddenElt);
   formElt.appendChild(buttonElt);
 
   divLeftElt.appendChild(imgElt);
@@ -155,4 +169,17 @@ function ProduitSeul(data){
 
   produitElt.appendChild(divLeftElt);
   produitElt.appendChild(divRightElt);
+}
+
+function addCart(panier){
+  let buttonSubmit = document.getElementById('submit');
+  buttonSubmit.addEventListener('click', function(event){
+    let inputValue = document.getElementById('quantity').value;
+    let hiddenValue = document.getElementById('price').value;
+    let idValue = obtenirParametre('id');
+    let lignePanier = {'id' : idValue, 'price' : hiddenValue, 'quantity' : inputValue};
+    panier.push(lignePanier);
+    console.log(panier);
+    localStorage.setItem('panier', JSON.stringify(panier));
+  });
 }
