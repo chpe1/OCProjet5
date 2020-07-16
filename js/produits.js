@@ -48,16 +48,14 @@ fetch('http://localhost:3000/api/teddies') // Appel de l'API -- qui retourne une
   if (obtenirParametre("id")){ // Si id existe dans l'URL
     for (let i=0;i<data.length;i++){ // On parcourt tout le tableau pour retrouver l'id correspondant
       if (data[i]._id == obtenirParametre("id")){ // Une fois le produit correspondant obtenu
-        let panier=[];
         ProduitSeul(data[i]); // On affiche les caractéristiques du produit seul
-        addCart(panier);
+        addCart();
       }
     }
   }
   else{ // Si id n'existe pas dans l'URL -> On affiche la liste des produits.
     listeProduits(data);
   }
-
 })
 .catch(function(error) { // gestion des erreurs renvoyées par le serveur
   console.log(error);
@@ -171,10 +169,14 @@ function ProduitSeul(data){
   produitElt.appendChild(divRightElt);
 }
 
-function addCart(panier){
+function addCart(){
   let buttonSubmit = document.getElementById('submit');
   buttonSubmit.addEventListener('click', function(event){
-    let inputValue = document.getElementById('quantity').value;
+    let inputValue = document.getElementById('quantity').value
+    let panier=JSON.parse(localStorage.getItem('panier'));
+    if (panier == null){
+      panier = [];
+    }
     let hiddenValue = document.getElementById('price').value;
     let idValue = obtenirParametre('id');
     let lignePanier = {'id' : idValue, 'price' : hiddenValue, 'quantity' : inputValue};
