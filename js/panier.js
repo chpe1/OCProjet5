@@ -18,8 +18,16 @@ function listCart(product){
     let sousTotal=0;
     let totalArticle=0;
     let trElt= document.createElement('tr');
+    let tdElt = document.createElement('td');
+        let imgElt = document.createElement('img');
+        imgElt.src= product.image;
+        imgElt.alt= product.name;
+        imgElt.setAttribute('width', '100px');
+        tdElt.appendChild(imgElt);
+    let td1Elt = document.createElement('td');
+    td1Elt.innerHTML='<strong>' + product.id + '</strong>';
     let td2Elt= document.createElement('td');
-    td2Elt.innerHTML='<strong>' + product.id + '</strong>';
+    td2Elt.innerHTML='<strong>' + product.name + '</strong>';
     let td3Elt=document.createElement('td');
     let formElt = document.createElement('form');
     formElt.classList.add('form-inline');
@@ -39,13 +47,14 @@ function listCart(product){
     
     let tbodyElt=document.getElementById('listePanier');
     tbodyElt.appendChild(trElt);
+    trElt.appendChild(tdElt);
+    trElt.appendChild(td1Elt);
     trElt.appendChild(td2Elt);
     trElt.appendChild(td3Elt);
     trElt.appendChild(td4Elt);
     trElt.appendChild(td5Elt);
     td3Elt.appendChild(formElt);
     formElt.appendChild(inputElt);
-
     return sousTotal;
 
 }
@@ -55,21 +64,21 @@ function subTotal(sousTotal){
     let tr2Elt= document.createElement('tr');
     let tdAElt= document.createElement('td');
     tdAElt.classList.add('text-right');
-    tdAElt.setAttribute('colspan', '3');
+    tdAElt.setAttribute('colspan', '5');
     tdAElt.innerHTML = "Sous-Total";
     let td6Elt = document.createElement('td');
     td6Elt.innerHTML = sousTotal + ' EUR';
     tr3Elt= document.createElement('tr');
     td7Elt= document.createElement('td');
     td7Elt.classList.add('text-right');
-    td7Elt.setAttribute('colspan', '3');
+    td7Elt.setAttribute('colspan', '5');
     td7Elt.innerHTML = "Frais de port";
     let td8Elt = document.createElement('td');
     td8Elt.innerHTML = fraisDePort + ' EUR';
     let tr4Elt= document.createElement('tr');
     let td9Elt= document.createElement('td');
     td9Elt.classList.add('text-right');
-    td9Elt.setAttribute('colspan', '3');
+    td9Elt.setAttribute('colspan', '5');
     td9Elt.innerHTML = "Total";
     let td10Elt = document.createElement('td');
     td10Elt.innerHTML = sousTotal + fraisDePort + ' EUR';
@@ -121,8 +130,6 @@ function commande(products){
             contact, 
             products
         };
-        console.log(JSON.stringify(body));
-
         
         let entetes = new Headers();
         entetes.append('Content-Type', 'application/json');
@@ -134,10 +141,14 @@ function commande(products){
             headers: entetes
         };
 
+        event.preventDefault();
+
         fetch('http://localhost:3000/api/teddies/order', fetchData)
         .then((response) => response.json())
-        .then(function() {
-            console.log('salut');
+        .then(function(data) {
+            localStorage.setItem('commande', JSON.stringify(data));
+            document.location.href = "./confirmation_commande.html";
+            //console.log(data);
         });
     } // fin callback addEventListener
     ); // fin addEventListener

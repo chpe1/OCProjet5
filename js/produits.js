@@ -141,6 +141,16 @@ function ProduitSeul(data){
   hiddenElt.setAttribute('value', data.price);
   hiddenElt.id = "price";
 
+  let hidden2Elt = document.createElement('input');
+  hidden2Elt.setAttribute('type', 'hidden');
+  hidden2Elt.setAttribute('value', data.name);
+  hidden2Elt.id = "name";
+
+  let hidden3Elt = document.createElement('input');
+  hidden3Elt.setAttribute('type', 'hidden');
+  hidden3Elt.setAttribute('value', data.imageUrl);
+  hidden3Elt.id = "image";
+
   let buttonElt = document.createElement('button');
   buttonElt.setAttribute('type', 'submit');
   buttonElt.textContent = "Ajoutez au panier";
@@ -158,6 +168,8 @@ function ProduitSeul(data){
   formGroupElt2.appendChild(inputElt);
   formElt.appendChild(prixElt);
   formElt.appendChild(hiddenElt);
+  formElt.appendChild(hidden2Elt);
+  formElt.appendChild(hidden3Elt);
   formElt.appendChild(buttonElt);
 
   divLeftElt.appendChild(imgElt);
@@ -178,8 +190,10 @@ function addCart(){
       panier = [];
     }
     let hiddenValue = document.getElementById('price').value;
+    let hidden2Value = document.getElementById('name').value;
+    let hidden3Value = document.getElementById('image').value;
     let idValue = obtenirParametre('id');
-    let lignePanier = {'id' : idValue, 'price' : hiddenValue, 'quantity' : inputValue};
+    let lignePanier = {'id' : idValue, 'price' : hiddenValue, 'quantity' : inputValue, 'name' : hidden2Value, 'image' : hidden3Value};
     panier.push(lignePanier);
     console.log(panier);
     localStorage.setItem('panier', JSON.stringify(panier));
