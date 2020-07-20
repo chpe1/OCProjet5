@@ -194,8 +194,20 @@ function addCart(){
     let hidden3Value = document.getElementById('image').value;
     let idValue = obtenirParametre('id');
     let lignePanier = {'id' : idValue, 'price' : hiddenValue, 'quantity' : inputValue, 'name' : hidden2Value, 'image' : hidden3Value};
-    panier.push(lignePanier);
-    console.log(panier);
+    let idExist = false;
+    panier.forEach(product => {
+      if (product.id == lignePanier.id)
+      {
+        idExist = true;
+        let newQuantity = 0;
+        newQuantity = parseInt(product.quantity,10) + parseInt(lignePanier.quantity,10);
+        product.quantity = newQuantity.toString();
+      }
+    });
+    if (!idExist){
+      panier.push(lignePanier);
+      alert('Votre produit a été ajouté au panier !')
+    }
     localStorage.setItem('panier', JSON.stringify(panier));
   });
 }
