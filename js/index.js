@@ -1,3 +1,30 @@
+// Récupération des données de l'API
+fetch('http://localhost:3000/api/teddies') // Appel de l'API -- qui retourne une promesse nommée response
+.then((response) => response.json()) // Transforme cette promesse en une autre promesse au format json.
+.then(function(data){ // Les données sont contenues dans data qui est un tableau d'objets.
+  if (getParamToURL("id")){ // Si id existe dans l'URL
+    let idExist = false;
+    for (let i=0;i<data.length;i++){ // On parcourt tout le tableau pour retrouver l'id correspondant
+      if (data[i]._id == getParamToURL("id")){ // Une fois le produit correspondant obtenu
+        productOnly(data[i]); // On affiche les caractéristiques du produit seul
+        addCart();
+        idExist = true;
+      }
+    }
+    if (!idExist){ // Si l'id de l'URL n'est pas dans le tableau de l'API
+        let message = 'Ce produit n\'existe pas !';
+        alert(message); 
+    }
+  }
+  else { // Si id n'existe pas dans l'URL -> On affiche la liste des produits.
+    productsList(data);
+  }
+})
+.catch(function(error) { // gestion des erreurs renvoyées par le serveur
+    let message = 'Le serveur a renvoyé une erreur ! ' + error + ' Veuillez réessayer ultérieurement !';
+    alert(message);
+});
+
 function productsList(data){ // Reconstruction du DOM de la partie CARD
   let productsElt = document.getElementById('products');
 
@@ -41,29 +68,8 @@ function productsList(data){ // Reconstruction du DOM de la partie CARD
   }
 }
 
-// Récupération des données de l'API
-fetch('http://localhost:3000/api/teddies') // Appel de l'API -- qui retourne une promesse nommée response
-.then((response) => response.json()) // Transforme cette promesse en une autre promesse au format json. then(response => response.json) est égal à then(fonction (response) { return response.json}
-.then(function(data){ // Les données sont contenues dans data qui est un tableau d'objets.
-  if (getParamToURL("id")){ // Si id existe dans l'URL
-    for (let i=0;i<data.length;i++){ // On parcourt tout le tableau pour retrouver l'id correspondant
-      if (data[i]._id == getParamToURL("id")){ // Une fois le produit correspondant obtenu
-        productOnly(data[i]); // On affiche les caractéristiques du produit seul
-        addCart();
-      }
-    }
-  }
-  else{ // Si id n'existe pas dans l'URL -> On affiche la liste des produits.
-    productsList(data);
-  }
-})
-.catch(function(error) { // gestion des erreurs renvoyées par le serveur
-  console.log(error);
-});
-
-
 function getParamToURL(){
-    var parsedUrl = new URL(window.location.href);
+    let parsedUrl = new URL(window.location.href);
     return parsedUrl.searchParams.get("id");
 }
 
@@ -157,7 +163,6 @@ function productOnly(data){
   buttonElt.classList.add('btn', 'btn-primary', 'w-100');
   buttonElt.id = "submit";
 
-
   formGroupElt1.appendChild(labelSelectElt);
   formGroupElt1.appendChild(selectElt);
 
@@ -227,4 +232,13 @@ function popup() // Ouvre un popup quand on ajoute un produit dans le panier
     divModalElt.innerHTML = '<div class="modal-dialog modal-dialog-centered" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="modalAddCartTitle">Votre produit a été ajouté au panier</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Continuez vos achats</button><a class="btn btn-primary" href="panier.html" role="button">Voir le panier</a></div></div></div>';
     let productElt = document.getElementById('products'); 
     productElt.appendChild(divModalElt);
+}
+
+function alert(message){
+    let productsElt = document.getElementById('products');
+        let divElt = document.createElement('div');
+        divElt.classList.add('alert', 'alert-danger');
+        divElt.setAttribute('role', 'alert');
+        divElt.innerHTML = message + ' <a href="index.html" title="Retour accueil">Retour à l\'accueil</a>';
+        productsElt.appendChild(divElt); 
 }

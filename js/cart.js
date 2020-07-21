@@ -57,7 +57,6 @@ function listCart(product){
     td3Elt.appendChild(formElt);
     formElt.appendChild(inputElt);
     return varSubTotal;
-
 }
 
 function subTotal(varSubTotal){
@@ -110,19 +109,19 @@ function emptyCart(){
 
 function order(products){
     // Récupération des données du formulaire
-    let form = document.getElementById('formPanier');
+    let form = document.getElementById('formCart');
     form.addEventListener('submit', function(event){
-        let nom = form.elements.nom.value;
-        let prenom = form.elements.prenom.value;
+        let name = form.elements.name.value;
+        let firstname = form.elements.firstname.value;
         let email = form.elements.email.value;
-        let adresse = form.elements.adresse.value;
-        let ville = form.elements.ville.value;
+        let address = form.elements.address.value;
+        let city = form.elements.city.value;
 
         let contact = {
-            lastName : nom,
-            firstName : prenom,
-            address : adresse,
-            city : ville,
+            lastName : name,
+            firstName : firstname,
+            address : address,
+            city : city,
             email : email
         };
 
@@ -152,34 +151,34 @@ function order(products){
         });
     } // fin callback addEventListener
     ); // fin addEventListener
-} // fin commande
+} // fin order
 
 
 function contactInfo(){
-    let divCoordonnees = document.getElementById('coordonnees');
+    let divContact = document.getElementById('contact');
     h3Elt = document.createElement('h3');
     h3Elt.innerHTML = 'Laissez-nous des informations utiles à votre commande : ';
-    divCoordonnees.appendChild(h3Elt);
+    divContact.appendChild(h3Elt);
 
     formElt = document.createElement('form');
-    formElt.id = 'formPanier';
-    divCoordonnees.appendChild(formElt);
+    formElt.id = 'formCart';
+    divContact.appendChild(formElt);
 
         divFormGroupElt = document.createElement('div');
         divFormGroupElt.classList.add('form-group', 'mt-3');
         formElt.appendChild(divFormGroupElt);
 
             labelName= document.createElement('label');
-            labelName.setAttribute('for', 'nom');
+            labelName.setAttribute('for', 'name');
             labelName.innerHTML = 'Nom :';
             divFormGroupElt.appendChild(labelName);
 
             inputName= document.createElement('input');
             inputName.classList.add('form-control');
-            inputName.id = 'nom';
+            inputName.id = 'name';
             inputName.setAttribute('type', 'text');
             inputName.setAttribute('placeholder', 'Indiquez votre nom');
-            inputName.setAttribute('aria-describedby', 'nom');
+            inputName.setAttribute('aria-describedby', 'name');
             inputName.required = true;
             divFormGroupElt.appendChild(inputName);
 
@@ -188,16 +187,16 @@ function contactInfo(){
         formElt.appendChild(divFormGroup2Elt);
 
             labelFirstName= document.createElement('label');
-            labelFirstName.setAttribute('for', 'prenom');
-            labelFirstName.innerHTML = 'Prenom :';
+            labelFirstName.setAttribute('for', 'firstname');
+            labelFirstName.innerHTML = 'Prénom :';
             divFormGroup2Elt.appendChild(labelFirstName);
 
             inputFirstName= document.createElement('input');
             inputFirstName.classList.add('form-control');
-            inputFirstName.id = 'prenom';
+            inputFirstName.id = 'firstname';
             inputFirstName.setAttribute('type', 'text');
             inputFirstName.setAttribute('placeholder', 'Indiquez votre prénom');
-            inputFirstName.setAttribute('aria-describedby', 'prénom');
+            inputFirstName.setAttribute('aria-describedby', 'firsname');
             inputFirstName.required = true;
             divFormGroup2Elt.appendChild(inputFirstName);
 
@@ -224,39 +223,39 @@ function contactInfo(){
         formElt.appendChild(divFormGroup4Elt)
 
             labelAddress= document.createElement('label');
-            labelAddress.setAttribute('for', 'adresse');
+            labelAddress.setAttribute('for', 'address');
             labelAddress.innerHTML = 'Adresse de livraison :';
             divFormGroup4Elt.appendChild(labelAddress);
 
                 textareaElt= document.createElement('textarea');
                 textareaElt.classList.add('form-control');
-                textareaElt.id = 'adresse';
+                textareaElt.id = 'address';
                 textareaElt.setAttribute('row', '5');
                 textareaElt.required = true;
                 divFormGroup4Elt.appendChild(textareaElt);
 
-            divFormGroup5Elt = document.createElement('div');
-            divFormGroup5Elt.classList.add('form-group', 'mt-3');
-            formElt.appendChild(divFormGroup5Elt)
+        divFormGroup5Elt = document.createElement('div');
+        divFormGroup5Elt.classList.add('form-group', 'mt-3');
+        formElt.appendChild(divFormGroup5Elt)
     
-                labelVille= document.createElement('label');
-                labelVille.setAttribute('for', 'ville');
-                labelVille.innerHTML = 'Ville :';
-                divFormGroup5Elt.appendChild(labelVille);
+            labelCity= document.createElement('label');
+            labelCity.setAttribute('for', 'city');
+            labelCity.innerHTML = 'Ville :';
+            divFormGroup5Elt.appendChild(labelCity);
     
-                inputVille= document.createElement('input');
-                inputVille.classList.add('form-control');
-                inputVille.id = 'ville';
-                inputVille.setAttribute('type', 'text');
-                inputVille.setAttribute('placeholder', 'Indiquez votre ville');
-                inputVille.setAttribute('aria-describedby', 'ville');
-                inputVille.required = true;
-                divFormGroup5Elt.appendChild(inputVille);
+            inputCity= document.createElement('input');
+            inputCity.classList.add('form-control');
+            inputCity.id = 'city';
+            inputCity.setAttribute('type', 'text');
+            inputCity.setAttribute('placeholder', 'Indiquez votre ville');
+            inputCity.setAttribute('aria-describedby', 'city');
+            inputCity.required = true;
+            divFormGroup5Elt.appendChild(inputCity);
 
-            buttonElt = document.createElement('button');
-            buttonElt.setAttribute('type', 'submit');
-            buttonElt.classList.add('btn', 'btn-primary', 'w-100');
-            buttonElt.id = 'submit';
-            buttonElt.innerHTML = 'Passer la commande';
-            formElt.appendChild(buttonElt);
+    buttonElt = document.createElement('button');
+    buttonElt.setAttribute('type', 'submit');
+    buttonElt.classList.add('btn', 'btn-primary', 'w-100');
+    buttonElt.id = 'submit';
+    buttonElt.innerHTML = 'Passer la commande';
+    formElt.appendChild(buttonElt);
 }

@@ -39,9 +39,9 @@ if (localStorage.getItem('order'))
             tbodyElt.id="orderList";
             tableElt.appendChild(tbodyElt);
 
-            order.products.forEach(product => {
-                orderList(product); 
-            });
+    order.products.forEach(product => {
+        orderList(product); 
+    });
 
     div2Elt = document.getElementById('sendOrder');
         h3Elt = document.createElement('h3');
@@ -79,8 +79,7 @@ function orderList(product){
     trElt.appendChild(td2Elt);
 }
 
-function tabAddress(contact){ // Ajouter votre commande vous sera envoyée à cette adresse
-
+function tabAddress(contact){ 
     pElt = document.createElement('p');
     pElt.classList.add('text-left');
     pElt.innerHTML = contact.lastName + ' ' + contact.firstName + ' ' + '<br/>' + contact.address + '<br/>' + contact.city;
