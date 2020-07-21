@@ -1,5 +1,5 @@
-function listeProduits(data){ // Reconstruction du DOM de la partie CARD
-  let produitsElt = document.getElementById('produits');
+function productsList(data){ // Reconstruction du DOM de la partie CARD
+  let productsElt = document.getElementById('products');
 
   for (let i=0; i<data.length; i++){
       let divColElt = document.createElement('div');
@@ -37,7 +37,7 @@ function listeProduits(data){ // Reconstruction du DOM de la partie CARD
       divCardElt.appendChild(divBodyElt);
       divCardElt.appendChild(aElt);
       divColElt.appendChild(divCardElt);
-      produitsElt.appendChild(divColElt);
+      productsElt.appendChild(divColElt);
   }
 }
 
@@ -48,13 +48,13 @@ fetch('http://localhost:3000/api/teddies') // Appel de l'API -- qui retourne une
   if (obtenirParametre("id")){ // Si id existe dans l'URL
     for (let i=0;i<data.length;i++){ // On parcourt tout le tableau pour retrouver l'id correspondant
       if (data[i]._id == obtenirParametre("id")){ // Une fois le produit correspondant obtenu
-        ProduitSeul(data[i]); // On affiche les caractéristiques du produit seul
+        productOnly(data[i]); // On affiche les caractéristiques du produit seul
         addCart();
       }
     }
   }
   else{ // Si id n'existe pas dans l'URL -> On affiche la liste des produits.
-    listeProduits(data);
+    productsList(data);
   }
 })
 .catch(function(error) { // gestion des erreurs renvoyées par le serveur
@@ -70,8 +70,8 @@ function obtenirParametre (sVar) {
 
 
 // Reconstruction du DOM pour un produit
-function ProduitSeul(data){
-  let produitElt = document.getElementById('produits'); 
+function productOnly(data){
+  let productElt = document.getElementById('products'); 
 
   let divLeftElt = document.createElement('div');
   divLeftElt.classList.add('col-12', 'col-lg-6');
@@ -153,6 +153,8 @@ function ProduitSeul(data){
 
   let buttonElt = document.createElement('button');
   buttonElt.setAttribute('type', 'submit');
+  buttonElt.setAttribute('data-toggle', 'modal');
+  buttonElt.setAttribute('data-target', '#modalAddCart');
   buttonElt.textContent = "Ajoutez au panier";
   buttonElt.classList.add('btn', 'btn-primary', 'w-100');
   buttonElt.id = "submit";
@@ -177,37 +179,55 @@ function ProduitSeul(data){
   divRightElt.appendChild(h1Elt);
   divRightElt.appendChild(formElt);
 
-  produitElt.appendChild(divLeftElt);
-  produitElt.appendChild(divRightElt);
+  productElt.appendChild(divLeftElt);
+  productElt.appendChild(divRightElt);
 }
 
 function addCart(){
   let buttonSubmit = document.getElementById('submit');
   buttonSubmit.addEventListener('click', function(event){
+    event.preventDefault();
     let inputValue = document.getElementById('quantity').value
-    let panier=JSON.parse(localStorage.getItem('panier'));
-    if (panier == null){
-      panier = [];
+    let cart=JSON.parse(localStorage.getItem('cart'));
+    if (cart == null){
+      cart = [];
     }
     let hiddenValue = document.getElementById('price').value;
     let hidden2Value = document.getElementById('name').value;
     let hidden3Value = document.getElementById('image').value;
     let idValue = obtenirParametre('id');
-    let lignePanier = {'id' : idValue, 'price' : hiddenValue, 'quantity' : inputValue, 'name' : hidden2Value, 'image' : hidden3Value};
+    let lineCart = {'id' : idValue, 'price' : hiddenValue, 'quantity' : inputValue, 'name' : hidden2Value, 'image' : hidden3Value};
     let idExist = false;
-    panier.forEach(product => {
-      if (product.id == lignePanier.id)
+    cart.forEach(product => {
+      if (product.id == lineCart.id)
       {
         idExist = true;
         let newQuantity = 0;
-        newQuantity = parseInt(product.quantity,10) + parseInt(lignePanier.quantity,10);
+        newQuantity = parseInt(product.quantity,10) + parseInt(lineCart.quantity,10);
         product.quantity = newQuantity.toString();
+        popup();
+        
       }
     });
     if (!idExist){
-      panier.push(lignePanier);
-      alert('Votre produit a été ajouté au panier !')
+      cart.push(lineCart);
+      popup();
     }
-    localStorage.setItem('panier', JSON.stringify(panier));
+    localStorage.setItem('cart', JSON.stringify(cart));
   });
 }
+
+function popup() // Ouvre un popup quand on ajoute un produit dans le panier
+{
+    divModalElt = document.createElement('div');
+    divModalElt.classList.add('modal', 'fade');
+    divModalElt.id='modalAddCart';
+    divModalElt.setAttribute('tabindex', '-1');
+    divModalElt.setAttribute('role', 'dialog');
+    divModalElt.setAttribute('aria-labelledby', 'modalAddCardTitle');
+    divModalElt.setAttribute('aria-hidden', 'true');
+    divModalElt.innerHTML = '<div class="modal-dialog modal-dialog-centered" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="modalAddCartTitle">Votre produit a été ajouté au panier</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Continuez vos achats</button><a class="btn btn-primary" href="panier.html" role="button">Voir le panier</a></div></div></div>';
+    let productElt = document.getElementById('products'); 
+    productElt.appendChild(divModalElt);
+}
+

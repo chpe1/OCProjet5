@@ -1,22 +1,22 @@
-if (localStorage.getItem('panier'))
+if (localStorage.getItem('cart'))
 {
-    let panier = JSON.parse(localStorage.getItem('panier'));
-    let sousTotal=0;
+    let cart = JSON.parse(localStorage.getItem('cart'));
+    let varSubTotal=0;
     let products= [];
-    panier.forEach(product => {
-            sousTotal += listCart(product);
+    cart.forEach(product => {
+            varSubTotal += listCart(product);
             products.push(product.id);
     });
-    subTotal(sousTotal);
-    coordonnees();
-    commande(products);
+    subTotal(varSubTotal);
+    contactInfo();
+    order(products);
 }
 else{
-    panierVide();
+    emptyCart();
 }
 
 function listCart(product){
-    let sousTotal=0;
+    let varSubTotal=0;
     let totalArticle=0;
     let trElt= document.createElement('tr');
     let tdElt = document.createElement('td');
@@ -44,9 +44,9 @@ function listCart(product){
     let td5Elt = document.createElement('td');
     totalArticle = (product.price/100) * product.quantity;
     td5Elt.innerHTML= totalArticle + ' EUR';
-    sousTotal += totalArticle;
+    varSubTotal += totalArticle;
     
-    let tbodyElt=document.getElementById('listePanier');
+    let tbodyElt=document.getElementById('listCart');
     tbodyElt.appendChild(trElt);
     trElt.appendChild(tdElt);
     trElt.appendChild(td1Elt);
@@ -56,35 +56,35 @@ function listCart(product){
     trElt.appendChild(td5Elt);
     td3Elt.appendChild(formElt);
     formElt.appendChild(inputElt);
-    return sousTotal;
+    return varSubTotal;
 
 }
 
-function subTotal(sousTotal){
-    let fraisDePort=0;
+function subTotal(varSubTotal){
+    let shipping=0;
     let tr2Elt= document.createElement('tr');
     let tdAElt= document.createElement('td');
     tdAElt.classList.add('text-right');
     tdAElt.setAttribute('colspan', '5');
     tdAElt.innerHTML = "Sous-Total";
     let td6Elt = document.createElement('td');
-    td6Elt.innerHTML = sousTotal + ' EUR';
+    td6Elt.innerHTML = varSubTotal + ' EUR';
     tr3Elt= document.createElement('tr');
     td7Elt= document.createElement('td');
     td7Elt.classList.add('text-right');
     td7Elt.setAttribute('colspan', '5');
     td7Elt.innerHTML = "Frais de port";
     let td8Elt = document.createElement('td');
-    td8Elt.innerHTML = fraisDePort + ' EUR';
+    td8Elt.innerHTML = shipping + ' EUR';
     let tr4Elt= document.createElement('tr');
     let td9Elt= document.createElement('td');
     td9Elt.classList.add('text-right');
     td9Elt.setAttribute('colspan', '5');
     td9Elt.innerHTML = "Total";
     let td10Elt = document.createElement('td');
-    td10Elt.innerHTML = sousTotal + fraisDePort + ' EUR';
+    td10Elt.innerHTML = varSubTotal + shipping + ' EUR';
 
-    tbodyElt=document.getElementById('listePanier');
+    tbodyElt=document.getElementById('listCart');
     tbodyElt.appendChild(tr2Elt);
     tr2Elt.appendChild(tdAElt);
     tr2Elt.appendChild(td6Elt);
@@ -96,8 +96,8 @@ function subTotal(sousTotal){
     tr4Elt.appendChild(td10Elt);
 }
 
-function panierVide(){
-    tbodyElt = document.getElementById('listePanier');
+function emptyCart(){
+    tbodyElt = document.getElementById('listCart');
     trElt = document.createElement('tr');
     tdElt = document.createElement('td');
     tdElt.setAttribute('colspan', '6');
@@ -108,7 +108,7 @@ function panierVide(){
     trElt.appendChild(tdElt);
 }
 
-function commande(products){
+function order(products){
     // Récupération des données du formulaire
     let form = document.getElementById('formPanier');
     form.addEventListener('submit', function(event){
@@ -146,7 +146,7 @@ function commande(products){
         fetch('http://localhost:3000/api/teddies/order', fetchData)
         .then((response) => response.json())
         .then(function(data) {
-            localStorage.setItem('commande', JSON.stringify(data));
+            localStorage.setItem('order', JSON.stringify(data));
             document.location.href = "./confirmation_commande.html";
             //console.log(data);
         });
@@ -155,7 +155,7 @@ function commande(products){
 } // fin commande
 
 
-function coordonnees(){
+function contactInfo(){
     let divCoordonnees = document.getElementById('coordonnees');
     h3Elt = document.createElement('h3');
     h3Elt.innerHTML = 'Laissez-nous des informations utiles à votre commande : ';

@@ -1,7 +1,7 @@
-if (localStorage.getItem('commande'))
+if (localStorage.getItem('order'))
 {
-    let commande = JSON.parse(localStorage.getItem('commande'));
-    console.log(commande);
+    let order = JSON.parse(localStorage.getItem('order'));
+    console.log(order);
 
     jumbotonElt = document.getElementById('thanks');
         h1Elt = document.createElement('h1');
@@ -32,15 +32,15 @@ if (localStorage.getItem('commande'))
                 thElt=document.createElement('th');
                 thElt.classList.add('text-center');
                 thElt.setAttribute('colspan', '2');
-                thElt.innerHTML='Récapitulatif de votre commande numéro : ' + commande.orderId;
+                thElt.innerHTML='Récapitulatif de votre commande numéro : ' + order.orderId;
                 trElt.appendChild(thElt);
 
             tbodyElt = document.createElement('tbody');
-            tbodyElt.id="listeCommande";
+            tbodyElt.id="orderList";
             tableElt.appendChild(tbodyElt);
 
-            commande.products.forEach(product => {
-                listCommande(product); 
+            order.products.forEach(product => {
+                orderList(product); 
             });
 
     div2Elt = document.getElementById('sendOrder');
@@ -49,7 +49,7 @@ if (localStorage.getItem('commande'))
         h3Elt.innerHTML = "Votre commande vous sera envoyée à cette adresse :";
         div2Elt.appendChild(h3Elt);
 
-        tabAddress(commande.contact);
+        tabAddress(order.contact);
 
     localStorage.clear();
 }
@@ -67,13 +67,13 @@ else{
     jumbotonElt.appendChild(pElt);
 }
 
-function listCommande(product){
+function orderList(product){
     let trElt= document.createElement('tr');
     let td1Elt= document.createElement('td');
     td1Elt.innerHTML='<img src="' + product.imageUrl + '" alt="' + product._id + '" width="100px">';
     let td2Elt= document.createElement('td');
     td2Elt.innerHTML= product.name;    
-    let tbodyElt=document.getElementById('listeCommande');
+    let tbodyElt=document.getElementById('orderList');
     tbodyElt.appendChild(trElt);
     trElt.appendChild(td1Elt);
     trElt.appendChild(td2Elt);
