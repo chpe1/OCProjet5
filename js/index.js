@@ -45,9 +45,9 @@ function productsList(data){ // Reconstruction du DOM de la partie CARD
 fetch('http://localhost:3000/api/teddies') // Appel de l'API -- qui retourne une promesse nommée response
 .then((response) => response.json()) // Transforme cette promesse en une autre promesse au format json. then(response => response.json) est égal à then(fonction (response) { return response.json}
 .then(function(data){ // Les données sont contenues dans data qui est un tableau d'objets.
-  if (obtenirParametre("id")){ // Si id existe dans l'URL
+  if (getParamToURL("id")){ // Si id existe dans l'URL
     for (let i=0;i<data.length;i++){ // On parcourt tout le tableau pour retrouver l'id correspondant
-      if (data[i]._id == obtenirParametre("id")){ // Une fois le produit correspondant obtenu
+      if (data[i]._id == getParamToURL("id")){ // Une fois le produit correspondant obtenu
         productOnly(data[i]); // On affiche les caractéristiques du produit seul
         addCart();
       }
@@ -62,12 +62,10 @@ fetch('http://localhost:3000/api/teddies') // Appel de l'API -- qui retourne une
 });
 
 
-// Fonction de récupération de l'ID trouvée sur https://developer.mozilla.org/fr/docs/Web/API/window/location
-
-function obtenirParametre (sVar) {
-  return unescape(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + escape(sVar).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
+function getParamToURL(){
+    var parsedUrl = new URL(window.location.href);
+    return parsedUrl.searchParams.get("id");
 }
-
 
 // Reconstruction du DOM pour un produit
 function productOnly(data){
@@ -195,7 +193,7 @@ function addCart(){
     let hiddenValue = document.getElementById('price').value;
     let hidden2Value = document.getElementById('name').value;
     let hidden3Value = document.getElementById('image').value;
-    let idValue = obtenirParametre('id');
+    let idValue = getParamToURL('id');
     let lineCart = {'id' : idValue, 'price' : hiddenValue, 'quantity' : inputValue, 'name' : hidden2Value, 'image' : hidden3Value};
     let idExist = false;
     cart.forEach(product => {
@@ -230,4 +228,3 @@ function popup() // Ouvre un popup quand on ajoute un produit dans le panier
     let productElt = document.getElementById('products'); 
     productElt.appendChild(divModalElt);
 }
-
