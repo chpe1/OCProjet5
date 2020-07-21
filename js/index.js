@@ -1,6 +1,14 @@
 // Récupération des données de l'API
 fetch('http://localhost:3000/api/teddies') // Appel de l'API -- qui retourne une promesse nommée response
-.then((response) => response.json()) // Transforme cette promesse en une autre promesse au format json.
+.then(function(response){
+  if (response.ok){
+    return response.json(); // Transforme cette promesse en une autre promesse au format json.
+  }
+  else{
+    let message = 'Le serveur a reçu la demande indique : ' + error + ' Veuillez réessayer ultérieurement !';
+    alert(message);
+  }
+}) 
 .then(function(data){ // Les données sont contenues dans data qui est un tableau d'objets.
   if (getParamToURL("id")){ // Si id existe dans l'URL
     let idExist = false;
