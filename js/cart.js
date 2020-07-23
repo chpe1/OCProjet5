@@ -4,11 +4,14 @@ if (localStorage.getItem('cart'))
     let varSubTotal=0;
     let products= [];
     cart.forEach(product => {
-            varSubTotal += listCart(product);
-            products.push(product.id);
+        varSubTotal += listCart(product);
+        for (let i=0; i<product.quantity; i++){
+        products.push(product.id);
+        };
     });
     subTotal(varSubTotal);
     contactInfo();
+    formRemove();
     order(products);
 }
 else{
@@ -25,8 +28,8 @@ function listCart(product){
         imgElt.alt= product.name;
         imgElt.setAttribute('width', '100px');
         tdElt.appendChild(imgElt);
-    let td1Elt = document.createElement('td');
-    td1Elt.innerHTML='<strong>' + product.id + '</strong>';
+    // let td1Elt = document.createElement('td');
+    // td1Elt.innerHTML='<strong>' + product.id + '</strong>';
     let td2Elt= document.createElement('td');
     td2Elt.innerHTML='<strong>' + product.name + '</strong>';
     let td3Elt=document.createElement('td');
@@ -36,26 +39,31 @@ function listCart(product){
     inputElt.classList.add('form-control');
     inputElt.setAttribute('type', 'number');
     inputElt.setAttribute('value', product.quantity);
-    inputElt.setAttribute('min', '1');
+    inputElt.setAttribute('min', '0');
     inputElt.setAttribute('max', '10');
     inputElt.setAttribute('name', 'quantity');
     let td4Elt = document.createElement('td');
     td4Elt.innerHTML=product.price/100 + ' EUR';
-    let td5Elt = document.createElement('td');
+    td5Elt = document.createElement('td');
+    formRemoveElt = document.createElement('form');
+    formRemoveElt.classList.add('formRemove');
+    formRemoveElt.innerHTML = '<button class="btn btn-primary" type="submit">X</button>';
+
     totalArticle = (product.price/100) * product.quantity;
-    td5Elt.innerHTML= totalArticle + ' EUR';
     varSubTotal += totalArticle;
-    
+
     let tbodyElt=document.getElementById('listCart');
     tbodyElt.appendChild(trElt);
     trElt.appendChild(tdElt);
-    trElt.appendChild(td1Elt);
+    // trElt.appendChild(td1Elt);
     trElt.appendChild(td2Elt);
     trElt.appendChild(td3Elt);
     trElt.appendChild(td4Elt);
-    trElt.appendChild(td5Elt);
     td3Elt.appendChild(formElt);
     formElt.appendChild(inputElt);
+    trElt.appendChild(td5Elt);
+    td5Elt.appendChild(formRemoveElt);
+
     return varSubTotal;
 }
 
@@ -64,21 +72,21 @@ function subTotal(varSubTotal){
     let tr2Elt= document.createElement('tr');
     let tdAElt= document.createElement('td');
     tdAElt.classList.add('text-right');
-    tdAElt.setAttribute('colspan', '5');
+    tdAElt.setAttribute('colspan', '3');
     tdAElt.innerHTML = "Sous-Total";
     let td6Elt = document.createElement('td');
     td6Elt.innerHTML = varSubTotal + ' EUR';
     tr3Elt= document.createElement('tr');
     td7Elt= document.createElement('td');
     td7Elt.classList.add('text-right');
-    td7Elt.setAttribute('colspan', '5');
+    td7Elt.setAttribute('colspan', '3');
     td7Elt.innerHTML = "Frais de port";
     let td8Elt = document.createElement('td');
     td8Elt.innerHTML = shipping + ' EUR';
     let tr4Elt= document.createElement('tr');
     let td9Elt= document.createElement('td');
     td9Elt.classList.add('text-right');
-    td9Elt.setAttribute('colspan', '5');
+    td9Elt.setAttribute('colspan', '3');
     td9Elt.innerHTML = "Total";
     let td10Elt = document.createElement('td');
     td10Elt.innerHTML = varSubTotal + shipping + ' EUR';
@@ -143,11 +151,18 @@ function order(products){
         event.preventDefault();
 
         fetch('http://localhost:3000/api/teddies/order', fetchData)
-        .then((response) => response.json())
+        .then(function(response){
+            if (response.ok){
+              return response.json(); // Transforme cette promesse en une autre promesse au format json.
+            }
+            else{
+              let message = 'Le serveur a reçu la demande indique : ' + error + ' Veuillez réessayer ultérieurement !';
+              alert(message);
+            }
+          }) 
         .then(function(data) {
             localStorage.setItem('order', JSON.stringify(data));
             document.location.href = "./confirmation_commande.html";
-            //console.log(data);
         });
     } // fin callback addEventListener
     ); // fin addEventListener
@@ -258,4 +273,31 @@ function contactInfo(){
     buttonElt.id = 'submit';
     buttonElt.innerHTML = 'Passer la commande';
     formElt.appendChild(buttonElt);
+}
+
+function alert(message){
+    let productsElt = document.getElementById('contact');
+        let divElt = document.createElement('div');
+        divElt.classList.add('alert', 'alert-danger');
+        divElt.setAttribute('role', 'alert');
+        divElt.innerHTML = message + ' <a href="index.html" title="Retour accueil">Retour à l\'accueil</a>';
+        productsElt.appendChild(divElt); 
+}
+
+function removeProduct(i){ // Lancer cette fonction au clic sur la X
+    let cart = JSON.parse(localStorage.getItem('cart'));
+    cart.splice(i,1);
+    localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+function formRemove(){
+    let formRemoveElt = document.getElementsByClassName('formRemove');
+    console.log(formRemoveElt.length);
+    for (let i=0;i<formRemoveElt.length;i++){
+        formRemoveElt[i].addEventListener('submit', function (e){
+            e.preventDefault();
+            removeProduct(i);
+            document.location.reload();
+        });
+    }
 }
